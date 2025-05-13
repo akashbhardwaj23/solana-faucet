@@ -10,6 +10,8 @@ import { Input } from "./ui/input";
 import { Button } from "./ui/button";
 import Link from "next/link";
 import Loader from "./loading";
+import {toast, Toaster} from "sonner"
+import {} from "lucide-react"
 
 type BalanceOrAirdrop = "balance" | "Airdrop";
 
@@ -22,7 +24,8 @@ export function CardComponent() {
 
   const sendBalanceOrAirdropRequest = async (type: BalanceOrAirdrop) => {
     if (!publicKey) {
-      alert("Public key is required");
+      toast.info("Public Key is Required");
+      // alert("Public key is required");
       return;
     }
 
@@ -33,7 +36,9 @@ export function CardComponent() {
         method: "getBalance",
       });
       if (response === "Error") {
-        alert("You have given wrong publick key");
+
+        toast.error("You have Given a Wrong Public Key")
+        // alert("You have given wrong publick key");
         return;
       }
       setBalance(response.result.value);
@@ -46,9 +51,10 @@ export function CardComponent() {
       });
 
       if (response === "Error") {
-        alert(
-          "You have requested for too many Airdrop. Try again after 24 hours"
-        );
+        toast.error("You have requested for too many Airdrop. Try again after 24 hours")
+        // alert(
+        //   "You have requested for too many Airdrop. Try again after 24 hours"
+        // );
         setLoading(false);
         return;
       }
@@ -61,6 +67,12 @@ export function CardComponent() {
 
   return (
     <div className="absolute flex justify-center w-full top-48">
+      <Toaster toastOptions={
+        {
+          className:"!bg-foreground !text-white"
+        }
+      }
+      />
       <Card
         className={`flex flex-col justify-center items-center w-[35%] ${
           model ? "blur-sm" : ""
